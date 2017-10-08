@@ -1,15 +1,15 @@
 package ru.job4j;
 
 /**
- * Calculate.
+ * Class Calculate решение задачи части 001 урок1.
  *
  * @author Ekaterina Turka (ekaterina2rka@gmail.com)
- * @version $Id$
- * @since 0.1
+ * @since 09.10.2017
+ * @version 1
  */
 public class Calculate {
     /**
-     * Main.
+     * Конструктор, вывод строки в консоль.
      * @param args - args.
      */
     public static void main(String[] args) {
