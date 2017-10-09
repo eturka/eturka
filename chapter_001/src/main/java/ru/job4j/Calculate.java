@@ -15,8 +15,8 @@ public class Calculate {
      */
     public String echo(String name) {
         return "Echo, echo, echo : " + name;
-    }    
-    
+    }
+
     /**
      * Конструктор, вывод строки в консоль.
      * @param args - args.
