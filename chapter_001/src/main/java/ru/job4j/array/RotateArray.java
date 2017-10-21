@@ -7,7 +7,6 @@ package ru.job4j.array;
  * @version 1
  * @since 19.10.2017
  */
-
 public class RotateArray {
     /**
      * Возвращает массив повернутый по часовой стрелке.
