@@ -79,4 +79,12 @@ public class Item {
     public void setComments(String[] comments) {
         this.comments = comments;
     }
+
+    @Override
+    public String toString() {
+        return "Identifier: " + (id != null ? id : "null")
+                + " Name: " + (name != null ? name : "null")
+                + " Description: " + (desc != null ? desc : "null")
+                + " Created: " + String.valueOf(created);
+    }
 }
