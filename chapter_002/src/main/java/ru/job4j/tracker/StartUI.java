@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.Arrays;
+
 /**
  * Class StartUI.
  *
@@ -16,7 +18,7 @@ public class StartUI {
     /**
      * Input type.
      */
-    private ConsoleInput input = new ConsoleInput();
+    private Input input = new ConsoleInput();
     /**
      * Item tracker.
      */
@@ -36,13 +38,28 @@ public class StartUI {
     };
 
     /**
+     * Default constructor whit console input and empty tracker.
+     */
+    public StartUI() {
+    }
+
+    /**
+     * @param input   custom input
+     * @param tracker some tracker
+     */
+    public StartUI(Input input, Tracker tracker) {
+        this.input = input;
+        this.tracker = tracker;
+    }
+
+    /**
      * Add and print new item.
      */
     private void addNewItem() {
         String name = input.ask("Insert your name: ");
         String desc = input.ask("Insert item description: ");
         Item item = new Item(name, desc, System.currentTimeMillis());
-        System.out.println(tracker.add(item));
+        System.out.println(tracker.add(item).toString());
     }
 
     /**
@@ -50,9 +67,7 @@ public class StartUI {
      */
     private void showAllItems() {
         System.out.println("Items list:");
-        for (Item item : tracker.findAll()) {
-            System.out.println(item);
-        }
+        System.out.println(Arrays.toString(tracker.findAll()));
     }
 
     /**
@@ -73,7 +88,7 @@ public class StartUI {
      */
     private void deleteItem() {
         String id = input.ask("Insert item identifier: ");
-        Item item = new Item(null, null, 0L);
+        Item item = new Item();
         item.setId(id);
         tracker.delete(item);
         System.out.println("Item was deleted!");
@@ -84,7 +99,8 @@ public class StartUI {
      */
     private void findItemById() {
         String id = input.ask("Insert item identifier: ");
-        System.out.println(tracker.findById(id));
+        Item item = tracker.findById(id);
+        System.out.println(item);
     }
 
     /**
@@ -92,11 +108,8 @@ public class StartUI {
      */
     private void findItemsByName() {
         String name = input.ask("Insert user name: ");
-        for (Item item : tracker.findByName(name)) {
-            System.out.println(item);
-        }
+        System.out.println(Arrays.toString(tracker.findByName(name)));
     }
-
 
     /**
      * Print available actions list.
@@ -140,12 +153,12 @@ public class StartUI {
     /**
      * Main method of the program.
      */
-    private void init() {
+    public void init() {
         while (true) {
             printActions();
             String answer = input.ask("Select: ");
             if (EXIT.equals(answer)) {
-                System.exit(0);
+                break;
             }
             try {
                 executeAction(answer);
@@ -158,5 +171,6 @@ public class StartUI {
     public static void main(String[] args) {
         StartUI startUI = new StartUI();
         startUI.init();
+        System.exit(0);
     }
 }

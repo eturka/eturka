@@ -29,6 +29,9 @@ public class Item {
      */
     private String[] comments;
 
+    public Item() {
+    }
+
     /**
      * @param name    name
      * @param desc    description
