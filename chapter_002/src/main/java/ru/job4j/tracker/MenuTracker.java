@@ -11,6 +11,16 @@ import java.util.Arrays;
  */
 class MenuTracker {
     /**
+     * Action identifier to exit from the program.
+     */
+    static final int EXIT = 6;
+
+    /**
+     * Count of available actions.
+     */
+    private static final int ACTIONS_COUNT = 7;
+
+    /**
      * Available actions for user.
      */
     private UserAction[] actions = new UserAction[]{
@@ -19,7 +29,8 @@ class MenuTracker {
             new Edit(),
             new Delete(),
             new FindById(),
-            new FindByName()
+            new FindByName(),
+            new Exit()
     };
 
     /**
@@ -32,16 +43,52 @@ class MenuTracker {
     }
 
     /**
+     * @return action keys array
+     */
+    int[] getKeys() {
+        int[] keys = new int[ACTIONS_COUNT];
+        int i = 0;
+        for (UserAction action : this.actions) {
+            keys[i++] = action.key();
+        }
+        return keys;
+    }
+
+    /**
      * Return action by key.
      *
      * @param key action identifier
      * @return action
+     * @throws MenuOutException if key is out of bound
      */
     UserAction getAction(int key) {
-        if (key < 0 || key > this.actions.length) {
-            throw new IllegalArgumentException("Class Menu does not contain action with such key.");
+        for (UserAction action : actions) {
+            if (action.key() == key) {
+                return action;
+            }
         }
-        return this.actions[key];
+        throw new MenuOutException("Class Menu does not contain action with such key.");
+    }
+
+
+    /**
+     * Exit program.
+     */
+    static class Exit implements UserAction {
+        @Override
+        public int key() {
+            return EXIT;
+        }
+
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            System.out.println("Bye!");
+        }
+
+        @Override
+        public String info() {
+            return "Exit tracker";
+        }
     }
 
     /**

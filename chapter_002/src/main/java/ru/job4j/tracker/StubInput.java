@@ -7,7 +7,7 @@ package ru.job4j.tracker;
  * @version 1
  * @since 12.11.2017
  */
-public class StubInput implements Input {
+public class StubInput extends Input {
     /**
      * Array of answers.
      */
@@ -21,7 +21,7 @@ public class StubInput implements Input {
     /**
      * @param answers array of answers
      */
-    public StubInput(String[] answers) {
+    StubInput(String[] answers) {
         this.answers = answers;
     }
 

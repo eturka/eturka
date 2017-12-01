@@ -8,16 +8,15 @@ package ru.job4j.tracker;
  * @since 06.11.2017
  */
 public class StartUI {
-
     /**
      * Action identifier to exit from the program.
      */
-    static final String EXIT = "exit";
+    static final int EXIT = MenuTracker.EXIT;
 
     /**
      * Input type.
      */
-    private Input input = new ConsoleInput();
+    private Input input = new ValidateInput();
 
     /**
      * Item tracker.
@@ -44,17 +43,13 @@ public class StartUI {
      */
     void init() {
         MenuTracker menu = new MenuTracker();
+        int[] keys = menu.getKeys();
         while (true) {
             menu.print();
-            String answer = input.ask("Select action (or insert \"exit\" to quit program): ");
-            if (EXIT.equals(answer)) {
+            int key = input.ask("Select action: ", keys);
+            menu.getAction(key).execute(this.input, this.tracker);
+            if (EXIT == key) {
                 break;
-            }
-            try {
-                int key = Integer.parseInt(answer);
-                menu.getAction(key).execute(this.input, this.tracker);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid command: \"" + answer + "\"!");
             }
         }
     }
