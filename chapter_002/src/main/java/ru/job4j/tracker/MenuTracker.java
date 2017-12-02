@@ -18,38 +18,51 @@ class MenuTracker {
     /**
      * Count of available actions.
      */
-    private static final int ACTIONS_COUNT = 7;
+    private int count;
 
     /**
      * Available actions for user.
      */
-    private UserAction[] actions = new UserAction[]{
-            new Add(),
-            new ShowAll(),
-            new Edit(),
-            new Delete(),
-            new FindById(),
-            new FindByName(),
-            new Exit()
-    };
+    private UserAction[] actions = new UserAction[7];
 
     /**
      * Print menu.
      */
     void print() {
-        for (UserAction action : this.actions) {
-            System.out.println(action.key() + ". " + action.info());
+        for (int i = 0; i < this.count; i++) {
+            System.out.println(actions[i].info());
         }
+    }
+
+    /**
+     * Fill menu by actions.
+     */
+    void fillActions() {
+        this.addAction(new Add("Add new Item", 0));
+        this.addAction(new ShowAll("Show all items", 1));
+        this.addAction(new Edit("Edit item", 2));
+        this.addAction(new Delete("Delete item", 3));
+        this.addAction(new FindById("Find item by Id", 4));
+        this.addAction(new FindByName("Find items by name", 5));
+        this.addAction(new Exit("Exit tracker", EXIT));
+    }
+
+    /**
+     * Add new action to menu.
+     *
+     * @param action new action
+     */
+    private void addAction(UserAction action) {
+        this.actions[count++] = action;
     }
 
     /**
      * @return action keys array
      */
     int[] getKeys() {
-        int[] keys = new int[ACTIONS_COUNT];
-        int i = 0;
-        for (UserAction action : this.actions) {
-            keys[i++] = action.key();
+        int[] keys = new int[this.count];
+        for (int i = 0; i < this.count; i++) {
+            keys[i] = this.actions[i].key();
         }
         return keys;
     }
@@ -74,30 +87,35 @@ class MenuTracker {
     /**
      * Exit program.
      */
-    static class Exit implements UserAction {
-        @Override
-        public int key() {
-            return EXIT;
+    static class Exit extends BaseAction {
+        /**
+         * Create Exit with key and description.
+         *
+         * @param name information about action
+         * @param key  action key
+         */
+        Exit(String name, int key) {
+            super(name, key);
         }
 
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("Bye!");
         }
-
-        @Override
-        public String info() {
-            return "Exit tracker";
-        }
     }
 
     /**
      * Add and print new item.
      */
-    class Add implements UserAction {
-        @Override
-        public int key() {
-            return 0;
+    class Add extends BaseAction {
+        /**
+         * Create Add with key and description.
+         *
+         * @param name information about action
+         * @param key  action key
+         */
+        Add(String name, int key) {
+            super(name, key);
         }
 
         @Override
@@ -107,21 +125,20 @@ class MenuTracker {
             Item item = new Item(name, desc, System.currentTimeMillis());
             System.out.println(tracker.add(item).toString());
         }
-
-        @Override
-        public String info() {
-            return "Add new Item";
-        }
     }
 
     /**
      * Print all tracker's items.
      */
-    class ShowAll implements UserAction {
-
-        @Override
-        public int key() {
-            return 1;
+    class ShowAll extends BaseAction {
+        /**
+         * Create ShowAll with key and description.
+         *
+         * @param name information about action
+         * @param key  action key
+         */
+        ShowAll(String name, int key) {
+            super(name, key);
         }
 
         @Override
@@ -129,21 +146,20 @@ class MenuTracker {
             System.out.println("Items list:");
             System.out.println(Arrays.toString(tracker.findAll()));
         }
-
-        @Override
-        public String info() {
-            return "Show all items";
-        }
     }
 
     /**
      * Update item.
      */
-    static class Edit implements UserAction {
-
-        @Override
-        public int key() {
-            return 2;
+    static class Edit extends BaseAction {
+        /**
+         * Create Edit with key and description.
+         *
+         * @param name information about action
+         * @param key  action key
+         */
+        Edit(String name, int key) {
+            super(name, key);
         }
 
         @Override
@@ -156,21 +172,20 @@ class MenuTracker {
             tracker.update(item);
             System.out.println("Item was updated!");
         }
-
-        @Override
-        public String info() {
-            return "Edit item";
-        }
     }
 
     /**
      * Delete item.
      */
-    static class Delete implements UserAction {
-
-        @Override
-        public int key() {
-            return 3;
+    static class Delete extends BaseAction {
+        /**
+         * Create Delete with key and description.
+         *
+         * @param name information about action
+         * @param key  action key
+         */
+        Delete(String name, int key) {
+            super(name, key);
         }
 
         @Override
@@ -181,22 +196,21 @@ class MenuTracker {
             tracker.delete(item);
             System.out.println("Item was deleted!");
         }
-
-        @Override
-        public String info() {
-            return "Delete item";
-        }
     }
 }
 
 /**
  * Find item by id.
  */
-class FindById implements UserAction {
-
-    @Override
-    public int key() {
-        return 4;
+class FindById extends BaseAction {
+    /**
+     * Create FindById with key and description.
+     *
+     * @param name information about action
+     * @param key  action key
+     */
+    FindById(String name, int key) {
+        super(name, key);
     }
 
     @Override
@@ -205,31 +219,25 @@ class FindById implements UserAction {
         Item item = tracker.findById(id);
         System.out.println(item);
     }
-
-    @Override
-    public String info() {
-        return "Find item by Id";
-    }
 }
 
 /**
  * Find items by name.
  */
-class FindByName implements UserAction {
-
-    @Override
-    public int key() {
-        return 5;
+class FindByName extends BaseAction {
+    /**
+     * Create FindByName with key and description.
+     *
+     * @param name information about action
+     * @param key  action key
+     */
+    FindByName(String name, int key) {
+        super(name, key);
     }
 
     @Override
     public void execute(Input input, Tracker tracker) {
         String name = input.ask("Insert user name: ");
         System.out.println(Arrays.toString(tracker.findByName(name)));
-    }
-
-    @Override
-    public String info() {
-        return "Find items by name";
     }
 }

@@ -12,12 +12,10 @@ public class StartUI {
      * Action identifier to exit from the program.
      */
     static final int EXIT = MenuTracker.EXIT;
-
     /**
      * Input type.
      */
     private Input input = new ValidateInput();
-
     /**
      * Item tracker.
      */
@@ -43,6 +41,7 @@ public class StartUI {
      */
     void init() {
         MenuTracker menu = new MenuTracker();
+        menu.fillActions();
         int[] keys = menu.getKeys();
         while (true) {
             menu.print();
