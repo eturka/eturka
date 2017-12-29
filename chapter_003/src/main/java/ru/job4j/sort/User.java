@@ -30,6 +30,20 @@ public class User implements Comparable<User> {
     }
 
     /**
+     * @return user name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return user age
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
