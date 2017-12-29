@@ -98,6 +98,9 @@ class MenuTracker {
             super(name, key);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("Bye!");
@@ -118,6 +121,9 @@ class MenuTracker {
             super(name, key);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             String name = input.ask("Insert your name: ");
@@ -141,6 +147,9 @@ class MenuTracker {
             super(name, key);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("Items list:");
@@ -162,6 +171,9 @@ class MenuTracker {
             super(name, key);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             String id = input.ask("Insert item identifier: ");
@@ -188,12 +200,13 @@ class MenuTracker {
             super(name, key);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void execute(Input input, Tracker tracker) {
             String id = input.ask("Insert item identifier: ");
-            Item item = new Item();
-            item.setId(id);
-            tracker.delete(item);
+            tracker.delete(id);
             System.out.println("Item was deleted!");
         }
     }
@@ -213,6 +226,9 @@ class FindById extends BaseAction {
         super(name, key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(Input input, Tracker tracker) {
         String id = input.ask("Insert item identifier: ");
@@ -235,6 +251,9 @@ class FindByName extends BaseAction {
         super(name, key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(Input input, Tracker tracker) {
         String name = input.ask("Insert user name: ");

@@ -47,7 +47,7 @@ public class TrackerTest {
         Tracker tracker = new Tracker();
         Item item = new Item("test1", "testDescription", 123L);
         tracker.add(item);
-        tracker.delete(item);
+        tracker.delete(item.getId());
         assertNull(tracker.findById(item.getId()));
     }
 }

@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class Tracker.
@@ -10,8 +11,7 @@ import java.util.Arrays;
  * @since 02.11.2017
  */
 public class Tracker {
-    private Item[] items = new Item[100];
-    private int length = 0;
+    private List<Item> items = new ArrayList<>();
 
     /**
      * Addition.
@@ -21,7 +21,7 @@ public class Tracker {
      */
     public Item add(Item item) {
         item.setId(String.valueOf(item.hashCode()));
-        items[length++] = item;
+        items.add(item);
         return item;
     }
 
@@ -46,16 +46,15 @@ public class Tracker {
     /**
      * Delete.
      *
-     * @param item container with information about item that you need to delete
-     * @throws IllegalArgumentException when you try to update item that not exist
+     * @param id container with information about item that you need to delete
+     * @throws IllegalArgumentException when you try to delete item that not exist
      */
-    public void delete(Item item) {
-        int position = getPositionById(item.getId());
-        if (position == length) {
+    public void delete(String id) {
+        Item item = findById(id);
+        if (item == null) {
             throw new IllegalArgumentException("Can't delete, item wasn't found!");
         }
-        System.arraycopy(items, position + 1, items, position, length - position);
-        length--;
+        this.items.remove(item);
     }
 
     /**
@@ -64,7 +63,7 @@ public class Tracker {
      * @return list of items
      */
     public Item[] findAll() {
-        return this.items;
+        return this.items.toArray(new Item[items.size()]);
     }
 
 
@@ -79,14 +78,13 @@ public class Tracker {
         if (name == null) {
             throw new IllegalArgumentException("Item name can't be null!");
         }
-        Item[] temp = new Item[100];
-        int count = 0;
-        for (int i = 0; i < length; i++) {
-            if (name.equals(this.items[i].getName())) {
-                temp[count++] = this.items[i];
+        List<Item> find = new ArrayList<>();
+        for (Item item : this.items) {
+            if (item.getName().equals(name)) {
+                find.add(item);
             }
         }
-        return Arrays.copyOf(temp, count);
+        return find.toArray(new Item[find.size()]);
     }
 
 
@@ -102,31 +100,12 @@ public class Tracker {
             throw new IllegalArgumentException("Item id can't be null!");
         }
         Item find = null;
-        for (int i = 0; i < length; i++) {
-            if (id.equals(this.items[i].getId())) {
-                find = this.items[i];
+        for (Item item : this.items) {
+            if (item.getId().equals(id)) {
+                find = item;
                 break;
             }
         }
         return find;
-    }
-
-    /**
-     * Search item position in array items.
-     *
-     * @param id itm identifier
-     * @return position of item with id | items length if item wasn't found
-     */
-    private int getPositionById(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Item id can't be null!");
-        }
-        int i;
-        for (i = 0; i < length; i++) {
-            if (id.equals(this.items[i].getId())) {
-                break;
-            }
-        }
-        return i;
     }
 }
