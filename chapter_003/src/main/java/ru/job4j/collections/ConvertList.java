@@ -49,4 +49,20 @@ public class ConvertList {
         }
         return array;
     }
+
+    /**
+     * Convert list of arrays of int to the list of Integer with sequence of elements preserving.
+     *
+     * @param list List of arrays of int
+     * @return List of Integer
+     */
+    public List<Integer> convert(List<int[]> list) {
+        List<Integer> integers = new ArrayList<>();
+        for (int[] array : list) {
+            for (int value : array) {
+                integers.add(value);
+            }
+        }
+        return integers;
+    }
 }
