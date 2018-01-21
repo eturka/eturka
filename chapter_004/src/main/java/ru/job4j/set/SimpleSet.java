@@ -1,6 +1,6 @@
 package ru.job4j.set;
 
-import ru.job4j.list.ArrayContainer;
+import ru.job4j.list.ListContainer;
 
 import java.util.Iterator;
 
@@ -14,7 +14,7 @@ public class SimpleSet<T> implements Iterable<T> {
     /**
      * Base container.
      */
-    private final ArrayContainer<T> array = new ArrayContainer<>();
+    private final ListContainer<T> array = new ListContainer<>();
 
     /**
      * Add new element.
