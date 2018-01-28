@@ -19,7 +19,7 @@ public class UserMapTest {
      * Test for visual assert, in frame of task.
      */
     @Test
-    public void whenAddTwoSameElementsWithoutOverridingEqualsThenPrintTwo() {
+    public void whenAddTwoSameElementsWithOverridingEqualsAndHashCodeThenPrintOne() {
         Map<User, Object> map = new HashMap<>();
         Calendar birthday = new GregorianCalendar(1970, Calendar.JANUARY, 1);
         String name = "Ivan";
