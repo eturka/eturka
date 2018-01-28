@@ -1,6 +1,7 @@
 package ru.job4j.map;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * Class User.
@@ -33,5 +34,13 @@ public class User {
         this.name = name;
         this.birthday = birthday;
         this.children = children;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, birthday, children);
     }
 }
