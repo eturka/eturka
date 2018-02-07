@@ -69,4 +69,22 @@ public class TreeTest {
         tree.add(1, 2);
         assertFalse(tree.findBy(7).isPresent());
     }
+
+    @Test
+    public void whenEachNodeOfTheTreeHasLessThenThreeChildThenTreeIsBinary() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 4);
+        assertTrue(tree.isBinary());
+    }
+
+    @Test
+    public void whenSomeNodeOfTheTreeHasMoreThanTwoChildThenTreeIsNotBinary() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(1, 4);
+        assertFalse(tree.isBinary());
+    }
 }
