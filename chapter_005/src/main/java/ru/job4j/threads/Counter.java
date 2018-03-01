@@ -60,8 +60,17 @@ public class Counter {
      * Count spaces and words in the text.
      */
     private void count() {
-        new Thread(new Space()).start();
-        new Thread(new Word()).start();
+        Thread general = Thread.currentThread(), space = new Thread(new Space()), word = new Thread(new Word());
+        System.out.println(general.getName());
+        space.start();
+        word.start();
+        try {
+            space.join();
+            word.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(general.getName());
     }
 
     public static void main(String[] args) {
