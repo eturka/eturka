@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -11,18 +14,22 @@ import java.util.NoSuchElementException;
  * @author Ekaterina Turka (ekaterina2rka@gmail.com)
  * @since 15.01.2018
  */
+@ThreadSafe
 public class ArrayContainer<E> implements Iterable<E> {
     /**
      * Array of objects.
      */
+    @GuardedBy("this")
     private Object[] container = new Object[100];
     /**
      * Count of filed elements of container.
      */
+    @GuardedBy("this")
     private int size = 0;
     /**
      * Modifications count.
      */
+    @GuardedBy("this")
     private int modCount = 0;
 
     /**
@@ -30,7 +37,7 @@ public class ArrayContainer<E> implements Iterable<E> {
      *
      * @param value new element
      */
-    public void add(E value) {
+    public synchronized void add(E value) {
         if (this.size >= this.container.length) {
             this.container = Arrays.copyOf(this.container, this.size * 2);
         }
@@ -45,7 +52,7 @@ public class ArrayContainer<E> implements Iterable<E> {
      * @return element
      * @throws IndexOutOfBoundsException if index is negative or larger than size of container
      */
-    public E get(int index) {
+    public synchronized E get(int index) {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
@@ -56,7 +63,7 @@ public class ArrayContainer<E> implements Iterable<E> {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<E> iterator() {
+    public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {
             /**
              * Modifications count then the iterator was created.
@@ -72,8 +79,10 @@ public class ArrayContainer<E> implements Iterable<E> {
              */
             @Override
             public boolean hasNext() {
-                checkMod();
-                return this.index < size;
+                synchronized (ArrayContainer.this) {
+                    checkMod();
+                    return this.index < size;
+                }
             }
 
             /**
@@ -81,11 +90,13 @@ public class ArrayContainer<E> implements Iterable<E> {
              */
             @Override
             public E next() {
-                checkMod();
-                if (!this.hasNext()) {
-                    throw new NoSuchElementException();
+                synchronized (ArrayContainer.this) {
+                    checkMod();
+                    if (!this.hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    return (E) container[this.index++];
                 }
-                return (E) container[this.index++];
             }
 
             /**
@@ -94,8 +105,10 @@ public class ArrayContainer<E> implements Iterable<E> {
              * @throws ConcurrentModificationException if there was modification after iterator creation
              */
             private void checkMod() {
-                if (modCount > this.expectedModCount) {
-                    throw new ConcurrentModificationException();
+                synchronized (ArrayContainer.this) {
+                    if (modCount > this.expectedModCount) {
+                        throw new ConcurrentModificationException();
+                    }
                 }
             }
         };

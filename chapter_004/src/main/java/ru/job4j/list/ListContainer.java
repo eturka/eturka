@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -10,23 +13,27 @@ import java.util.NoSuchElementException;
  * @author Ekaterina Turka (ekaterina2rka@gmail.com)
  * @since 18.01.2018
  */
+@ThreadSafe
 public class ListContainer<E> implements Iterable<E> {
     /**
      * Link on first element of the list.
      */
+    @GuardedBy("this")
     private Node<E> first = null;
     /**
      * Last element of the list.
      */
+    @GuardedBy("this")
     private Node<E> last = null;
-
     /**
      * Count of filed elements of container.
      */
+    @GuardedBy("this")
     private int size = 0;
     /**
      * Modifications count.
      */
+    @GuardedBy("this")
     private int modCount = 0;
 
     /**
@@ -34,7 +41,7 @@ public class ListContainer<E> implements Iterable<E> {
      *
      * @param value new element
      */
-    public void add(E value) {
+    public synchronized void add(E value) {
         if (this.first == null || this.last == null) {
             this.first = new Node<>(value);
             this.last = this.first;
@@ -53,7 +60,7 @@ public class ListContainer<E> implements Iterable<E> {
      * @return element
      * @throws IndexOutOfBoundsException if index is negative or larger than size of container
      */
-    public E get(int index) {
+    public synchronized E get(int index) {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
@@ -68,7 +75,7 @@ public class ListContainer<E> implements Iterable<E> {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<E> iterator() {
+    public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {
             /**
              * Modifications count then the iterator was created.
@@ -108,8 +115,10 @@ public class ListContainer<E> implements Iterable<E> {
              * @throws ConcurrentModificationException if there was modification after iterator creation
              */
             private void checkMod() {
-                if (modCount > this.expectedModCount) {
-                    throw new ConcurrentModificationException();
+                synchronized (ListContainer.this) {
+                    if (modCount > this.expectedModCount) {
+                        throw new ConcurrentModificationException();
+                    }
                 }
             }
         };
