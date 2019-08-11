@@ -2,4 +2,4 @@
 [![codecov](https://codecov.io/gh/eturka/eturka/branch/master/graph/badge.svg)](https://codecov.io/gh/eturka/eturka)
 
 # eturka
-Repository for educational purposes at the courses [job4j] (http://job4j.ru/).
+Repository for educational purposes at the courses [job4j](http://job4j.ru/).
